@@ -1,0 +1,1 @@
+# Para-teste-do-Claude-code
