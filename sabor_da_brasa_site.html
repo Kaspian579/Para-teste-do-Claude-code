@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sabor da Brasa — Hamburgueria Artesanal</title>
+<meta name="description" content="Sabor da Brasa: hambúrgueres amassados na hora, shakes cremosos e combos para retirar ou receber em casa. Site fictício para demonstração.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0d0d10; --ink-2:#17171c; --ink-3:#24242b;
+  --paper:#f4f2ee; --paper-2:#e9e6e0; --white:#fff;
+  --fire:#e8472b; --fire-2:#ff6a2b; --gold:#f5a818;
+  --muted:#8b8b94;
+  --display:'Anton','Impact','Arial Narrow',sans-serif;
+  --body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --gutter:clamp(16px,4vw,56px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--ink);color:var(--white);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.display{font-family:var(--display);text-transform:uppercase;letter-spacing:.01em;line-height:.92;font-weight:400}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--fire-2)}
+
+/* ---------- cabeçalho ---------- */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(244,242,238,.92);backdrop-filter:blur(10px);color:var(--ink);border-bottom:1px solid rgba(0,0,0,.08)}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase}
+.logo svg{width:30px;height:30px;flex:none}
+.nav-links{display:flex;gap:clamp(18px,3vw,40px);font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.nav-links a{position:relative;padding:6px 0}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--fire);transition:width .25s}
+.nav-links a:hover::after{width:100%}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border-radius:4px;font-weight:700;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;transition:transform .2s,background .2s,box-shadow .2s}
+.btn-fire{background:var(--fire);color:var(--white);box-shadow:0 8px 24px -8px rgba(232,71,43,.7)}
+.btn-fire:hover{background:var(--fire-2);transform:translateY(-2px)}
+.btn-line{border:2px solid rgba(255,255,255,.55);color:var(--white)}
+.btn-line:hover{background:var(--white);color:var(--ink)}
+.badge{min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--ink);color:var(--white);font-size:.7rem;display:inline-grid;place-items:center}
+.badge[hidden]{display:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;padding:120px var(--gutter) 60px;display:grid;align-items:center;overflow:hidden;
+  background:radial-gradient(ellipse at 60% 40%,#2b2b33 0%,#0d0d10 62%)}
+.hero::before{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);z-index:1;pointer-events:none}
+.hero-copy{position:relative;z-index:3;max-width:640px}
+.hero h1{font-size:clamp(3.4rem,10.5vw,9rem);margin:14px 0 22px;text-shadow:0 6px 40px rgba(0,0,0,.6)}
+.hero h1 em{font-style:normal;color:var(--fire)}
+.hero p{max-width:420px;color:#cfcfd6;font-size:1rem;margin-bottom:28px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.scene{position:absolute;z-index:2;right:2vw;bottom:9%;width:min(62vw,820px);aspect-ratio:1.5}
+.paper{position:absolute;left:4%;right:2%;bottom:2%;height:46%;background:linear-gradient(#fff,#d9d6d0);transform:perspective(900px) rotateX(64deg) rotateZ(-3deg);border-radius:4px;box-shadow:0 60px 80px -20px rgba(0,0,0,.8);
+  clip-path:polygon(0 0,100% 0,100% 100%,98% 96%,96% 100%,94% 96%,92% 100%,90% 96%,88% 100%,86% 96%,84% 100%,82% 96%,80% 100%,78% 96%,76% 100%,74% 96%,72% 100%,70% 96%,68% 100%,66% 96%,64% 100%,62% 96%,60% 100%,58% 96%,56% 100%,54% 96%,52% 100%,50% 96%,48% 100%,46% 96%,44% 100%,42% 96%,40% 100%,38% 96%,36% 100%,34% 96%,32% 100%,30% 96%,28% 100%,26% 96%,24% 100%,22% 96%,20% 100%,18% 96%,16% 100%,14% 96%,12% 100%,10% 96%,8% 100%,6% 96%,4% 100%,2% 96%,0 100%)}
+.scene .burger{position:absolute;left:50%;bottom:-2%;width:52%;transform:translateX(-50%);filter:drop-shadow(0 30px 24px rgba(0,0,0,.55));animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateX(-50%) translateY(-12px)}}
+.scroll-hint{position:absolute;z-index:3;left:var(--gutter);bottom:26px;font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px}
+.scroll-hint i{display:block;width:44px;height:1px;background:var(--muted)}
+
+/* ---------- burger svg ---------- */
+.burger{display:block;width:100%;height:auto;overflow:visible;margin:0 auto}
+.burger .ly{transform:translateY(calc((var(--i) - 2.5) * 42px * var(--p,0)));transition:transform .12s linear}
+
+/* ---------- seção "amassado na hora" ---------- */
+.scrub{position:relative;height:260vh}
+.stick{position:sticky;top:0;height:100svh;overflow:hidden}
+.smash .stick{background:radial-gradient(ellipse at 35% 50%,#2a2a31,#0b0b0e 70%)}
+.smash .burger-wrap{position:absolute;left:0;top:0;bottom:0;width:60%;display:grid;place-items:center;padding-top:60px}
+.smash .burger{width:min(38vh,360px)}
+.smash .panel{position:absolute;right:0;top:0;bottom:0;width:42%;background:var(--paper);color:var(--ink);padding:120px clamp(24px,4vw,64px) 40px;display:flex;flex-direction:column;justify-content:center;
+  transform:translateX(calc((1 - min(var(--p) * 3.2,1)) * 105%))}
+.panel h2{font-size:clamp(2.6rem,6vw,5.2rem);margin:10px 0 18px}
+.panel p{color:#4a4a52;max-width:380px}
+.panel ul{list-style:none;margin-top:22px;display:grid;gap:10px;font-weight:600;font-size:.9rem}
+.panel li{display:flex;gap:12px;align-items:center}
+.panel li::before{content:"★";color:var(--fire)}
+
+/* ---------- seção "o empilhado" ---------- */
+.stack{background:var(--paper);color:var(--ink)}
+.stack .stick{display:grid;grid-template-columns:1fr minmax(240px,420px) 1fr;align-items:center;padding:80px var(--gutter) 0}
+.stack h2{font-size:clamp(3rem,8vw,7rem);align-self:end;padding-bottom:8vh}
+.stack .burger-box{position:relative;width:100%;aspect-ratio:5/7;max-height:78vh;justify-self:center}
+.stack .burger-box .burger{height:100%;width:100%}
+.callout{position:absolute;left:calc(100% + 18px);top:var(--y);transform:translateY(-50%);width:max-content;max-width:min(22vw,230px);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.25;opacity:0;transition:opacity .4s calc(var(--n) * .08s),transform .4s calc(var(--n) * .08s)}
+.callout::before{content:"";position:absolute;right:calc(100% + 8px);top:50%;width:36px;height:1px;background:var(--ink)}
+.callout small{display:block;color:#6b6b74;font-weight:500;letter-spacing:.04em;text-transform:none;font-size:.72rem}
+.stack.on .callout{opacity:1}
+.stack .note{align-self:end;padding-bottom:8vh;color:#5a5a62;max-width:240px;justify-self:end;font-size:.85rem}
+
+/* ---------- cardápio ---------- */
+.menu{background:var(--paper);color:var(--ink);padding:100px var(--gutter) 110px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:44px}
+.sec-head h2{font-size:clamp(2.6rem,6vw,5rem)}
+.sec-head p{max-width:340px;color:#5a5a62;font-size:.92rem}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,28px)}
+.card{background:var(--white);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(0,0,0,.06);transition:transform .3s,box-shadow .3s}
+.card:hover{transform:translateY(-6px);box-shadow:0 24px 40px -20px rgba(0,0,0,.35)}
+.card .art{aspect-ratio:4/3;display:grid;place-items:center;background:linear-gradient(#e4e2dd,#f7f6f3);overflow:hidden}
+.card .art .burger{width:42%;transition:transform .4s}
+.card:hover .art .burger{transform:scale(1.07) rotate(-2deg)}
+.card .art.combo{background:radial-gradient(circle at 50% 30%,#8e1e17,#2a0909)}
+.card .art.combo svg{width:100%;height:100%}
+.card-body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card h3{font-size:clamp(1.8rem,3vw,2.6rem)}
+.card p{color:#5f5f68;font-size:.88rem;flex:1}
+.sizes{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:7px 12px;border-radius:99px;border:1.5px solid #cfccc5;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:.2s}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.price-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px}
+.price{font-family:var(--display);font-size:2rem;letter-spacing:.02em}
+.price small{font-family:var(--body);font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.08em;margin-right:4px}
+.tag{position:absolute;top:14px;left:14px;background:var(--fire);color:#fff;font-size:.66rem;font-weight:700;letter-spacing:.16em;padding:5px 10px;border-radius:3px;z-index:2}
+.card{position:relative}
+
+/* ---------- combo ---------- */
+.combo-sec{position:relative;background:#0a0a0d;min-height:92vh;display:grid;align-items:center;overflow:hidden;padding:100px var(--gutter)}
+.combo-sec .art{position:absolute;inset:0;display:grid;place-items:center start;padding-left:2vw}
+.combo-sec .art svg{width:min(66vw,900px);height:auto;opacity:.97}
+.combo-sec .copy{position:relative;z-index:2;margin-left:auto;max-width:360px;text-shadow:0 2px 24px rgba(0,0,0,.9)}
+.combo-sec h2{font-size:clamp(3rem,7vw,6rem);margin:10px 0 16px}
+.combo-sec p{color:#d9d9df;margin-bottom:22px}
+.combo-sec .big-price{font-family:var(--display);font-size:2.6rem;color:var(--gold);margin-bottom:18px}
+
+/* ---------- shakes ---------- */
+.shakes{background:linear-gradient(#0a0a0d,#1a1a20);padding:110px var(--gutter);display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(24px,5vw,80px);align-items:center;overflow:hidden}
+.shakes h2{font-size:clamp(3rem,7.5vw,6.4rem);margin:12px 0 18px}
+.shakes p{color:#c9c9d0;max-width:380px;margin-bottom:22px}
+.flavors{list-style:none;display:grid;gap:10px;margin-bottom:28px}
+.flavors li{display:flex;justify-content:space-between;gap:20px;max-width:380px;border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:10px;font-weight:600}
+.flavors li span:last-child{color:var(--gold);font-family:var(--display);letter-spacing:.04em}
+.shakes .art svg{width:100%;height:auto;filter:drop-shadow(0 40px 40px rgba(0,0,0,.6))}
+
+/* ---------- fecho ---------- */
+.finale{background:radial-gradient(ellipse at 50% 45%,#2b2b33,#0b0b0e 70%);padding:120px var(--gutter) 90px;text-align:center}
+.box{position:relative;max-width:640px;margin:0 auto 60px;perspective:900px}
+.box .lid{height:70px;margin:0 6%;background:linear-gradient(#1d1d23,#101014);border:1px solid #2c2c34;border-bottom:0;border-radius:6px 6px 0 0;transform:rotateX(18deg);transform-origin:bottom;display:grid;place-items:center}
+.box .lid::after{content:"";width:34%;height:16px;border-radius:50%;background:radial-gradient(ellipse,var(--fire),#a92c15);box-shadow:0 0 30px rgba(232,71,43,.5)}
+.box .front{background:linear-gradient(#17171c,#0b0b0e);border:1px solid #2c2c34;border-radius:0 0 6px 6px;padding:clamp(24px,5vw,48px);display:flex;align-items:center;justify-content:center;gap:clamp(14px,3vw,28px);box-shadow:0 50px 70px -30px #000}
+.box .emblem{width:clamp(70px,16vw,120px);flex:none}
+.box h3{font-size:clamp(2.4rem,7vw,4.6rem);line-height:.95;text-align:left}
+.box h3 span{display:block;font-size:.34em;letter-spacing:.3em;color:var(--fire);margin-top:6px}
+.box .motto{grid-column:1/-1}
+.motto{display:flex;align-items:center;gap:14px;justify-content:center;margin-top:22px;font-size:.62rem;letter-spacing:.3em;font-weight:700;text-transform:uppercase;color:var(--fire)}
+.motto i{flex:1;max-width:120px;height:2px;background:var(--fire)}
+.finale h2{font-size:clamp(2.4rem,6vw,4.6rem);margin-bottom:14px}
+.finale p{color:#c9c9d0;max-width:440px;margin:0 auto 28px}
+
+/* ---------- rodapé ---------- */
+footer{background:#060608;padding:60px var(--gutter) 90px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;font-size:.88rem;color:#b7b7c0;border-top:1px solid #1d1d23}
+footer h4{font-family:var(--display);font-weight:400;color:#fff;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;font-size:1rem}
+footer a:hover{color:var(--fire-2)}
+footer li{list-style:none;margin-bottom:6px}
+.demo-pill{position:fixed;z-index:60;left:50%;bottom:14px;transform:translateX(-50%);background:rgba(10,10,13,.92);color:#d9d9df;border:1px solid #2c2c34;border-radius:99px;padding:8px 16px;font-size:.68rem;letter-spacing:.04em;white-space:nowrap;max-width:calc(100vw - 24px);overflow:hidden;text-overflow:ellipsis}
+.toast{position:fixed;z-index:70;left:50%;bottom:64px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:6px;font-size:.85rem;font-weight:600;opacity:0;pointer-events:none;transition:.3s;border-left:4px solid var(--fire)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- revelar ao rolar ---------- */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- celular ---------- */
+@media (max-width:900px){
+  .nav-links{display:none}
+  .scene{position:relative;right:auto;bottom:auto;width:112%;margin:20px -6% 0;aspect-ratio:1.5}
+  .hero{align-items:start;padding-top:100px}
+  .cards{grid-template-columns:1fr}
+  .card .art{aspect-ratio:16/10}
+  .card .art .burger{width:34%}
+  .smash .burger-wrap{width:100%;height:58%;bottom:auto;padding-top:70px}
+  .smash .burger{width:min(30vh,240px)}
+  .smash .panel{top:auto;left:0;width:100%;height:46%;padding:28px var(--gutter);justify-content:flex-start;
+    transform:translateY(calc((1 - min(var(--p) * 3.2,1)) * 105%))}
+  .panel h2{font-size:2.4rem;margin:6px 0 10px}
+  .panel ul{margin-top:12px;gap:6px}
+  .stack .stick{grid-template-columns:1fr;grid-template-rows:auto 1fr;padding-top:76px;justify-items:center}
+  .stack h2{align-self:start;padding:0;text-align:center;font-size:3rem}
+  .stack .burger-box{max-height:62vh;width:min(58vw,300px);margin-right:34vw}
+  .stack .note{display:none}
+  .callout{max-width:34vw;font-size:.62rem;left:calc(100% + 10px)}
+  .callout::before{width:12px}
+  .callout small{display:none}
+  .combo-sec{align-items:end;min-height:100svh;padding-bottom:70px}
+  .combo-sec .art{align-items:start;padding-top:80px}
+  .combo-sec .art svg{width:112vw;margin-left:-6vw}
+  .scene .burger{width:62%}
+  .combo-sec .copy{margin:0;max-width:none;background:linear-gradient(transparent,rgba(10,10,13,.9) 30%);padding:60px 0 0}
+  .shakes{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  .scene .burger{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Símbolo reaproveitado: emblema da marca -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="emblem" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="48" fill="#e8472b"/>
+    <circle cx="50" cy="50" r="41" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="2 3" opacity=".7"/>
+    <path d="M50 15c8 15 24 22 20 44-2 13-13 24-20 24s-18-11-20-24c-1-9 7-14 9-24 4 6 7 8 9 8-1-10-1-18 2-28z" fill="#fff"/>
+    <path d="M50 46c4 8 11 11 9 22-1 7-6 12-9 12s-8-5-9-12c-1-6 3-9 4-14 2 3 4 4 5 4-1-5-1-8 0-12z" fill="#ff9b2b"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <a href="#topo" class="logo" aria-label="Sabor da Brasa — início"><svg aria-hidden="true"><use href="#emblem"/></svg>Sabor da Brasa</a>
+  <nav class="nav-links" aria-label="Principal">
+    <a href="#cardapio">Cardápio</a>
+    <a href="#conceito">Conceito</a>
+    <a href="#endereco">Endereço</a>
+  </nav>
+  <a href="#cardapio" class="btn btn-fire" id="orderBtn">Pedir agora <span class="badge" id="count" hidden>0</span></a>
+</header>
+
+<main id="topo">
+
+<!-- 1. HERO -->
+<section class="hero" aria-labelledby="h1">
+  <div class="hero-copy">
+    <span class="eyebrow">Hamburgueria artesanal · desde 2019</span>
+    <h1 class="display" id="h1">Feito na <em>brasa</em> como um campeão</h1>
+    <p>Blend de 180g amassado na chapa, queijo cheddar derretido e pão tostado na manteiga. Sem atalho, sem desculpa.</p>
+    <div class="hero-actions">
+      <a class="btn btn-fire" href="#cardapio">Ver cardápio</a>
+      <a class="btn btn-line" href="#conceito">Como fazemos</a>
+    </div>
+  </div>
+  <div class="scene" aria-hidden="true">
+    <div class="paper"></div>
+    <div data-burger></div>
+  </div>
+  <div class="scroll-hint"><i></i>Role para ver</div>
+</section>
+
+<!-- 2. AMASSADO NA HORA -->
+<section class="scrub smash" data-scrub style="--p:0" aria-labelledby="h-smash">
+  <div class="stick">
+    <div class="burger-wrap" aria-hidden="true"><div data-burger style="width:100%"></div></div>
+    <div class="panel">
+      <span class="eyebrow">Na chapa, na hora</span>
+      <h2 class="display" id="h-smash">Amassado<br>na hora</h2>
+      <p>Cada bolinha de 90g encontra a chapa a 250°C e é amassada até formar a crosta crocante que você só acha aqui.</p>
+      <ul>
+        <li>Carne 100% bovina, moída no dia</li>
+        <li>Queijo derretido sobre a brasa</li>
+        <li>Pão brioche tostado na manteiga</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. O EMPILHADO -->
+<section class="scrub stack" id="conceito" data-scrub data-labels style="--p:1" aria-labelledby="h-stack">
+  <div class="stick">
+    <h2 class="display" id="h-stack">O<br>Empilhado</h2>
+    <div class="burger-box">
+      <div data-burger style="height:100%"></div>
+      <div class="callout" style="--y:10.7%;--n:0">Pão brioche tostado<small>Manteiga e gergelim</small></div>
+      <div class="callout" style="--y:34%;--n:1">Molho da casa<small>Defumado e levemente picante</small></div>
+      <div class="callout" style="--y:47.4%;--n:2">Cebola caramelizada<small>Cozida devagar por 40 min</small></div>
+      <div class="callout" style="--y:61.7%;--n:3">Cheddar derretido<small>Duas fatias, ponto de fusão perfeito</small></div>
+      <div class="callout" style="--y:75.5%;--n:4">Blend 180g<small>Amassado e selado na chapa</small></div>
+      <div class="callout" style="--y:93%;--n:5">Pão base tostado<small>Para segurar tudo sem desmontar</small></div>
+    </div>
+    <p class="note">Seis camadas, uma ideia: cada ingrediente tem o seu lugar. Role devagar e veja como montamos.</p>
+  </div>
+</section>
+
+<!-- 4. CARDÁPIO -->
+<section class="menu" id="cardapio" aria-labelledby="h-menu">
+  <div class="sec-head rv">
+    <h2 class="display" id="h-menu">Cardápio</h2>
+    <p>Escolha o tamanho, adicione ao pedido e retire na loja ou receba em casa. Preços fictícios para demonstração.</p>
+  </div>
+  <div class="cards">
+    <article class="card rv" data-name="Brasa Clássico" data-prices='{"Simples":"24,90","Duplo":"32,90","Triplo":"39,90"}'>
+      <div class="art"><div data-burger data-opt="classic" style="width:100%"></div></div>
+      <div class="card-body">
+        <h3 class="display">Brasa Clássico</h3>
+        <p>Blend 180g, cheddar derretido, cebola caramelizada e molho da casa no brioche tostado.</p>
+        <div class="sizes" role="group" aria-label="Tamanho"></div>
+        <div class="price-row"><div class="price"><small>R$</small><span class="pv"></span></div><button class="btn btn-fire add">Adicionar</button></div>
+      </div>
+    </article>
+    <article class="card rv" data-name="Fumaça Dupla" data-prices='{"Simples":"27,90","Duplo":"36,90","Triplo":"44,90"}'>
+      <div class="art"><div data-burger data-opt="smoke" style="width:100%"></div></div>
+      <div class="card-body">
+        <h3 class="display">Fumaça Dupla</h3>
+        <p>Dois blends, bacon crocante, picles artesanal e barbecue defumado com um toque de pimenta.</p>
+        <div class="sizes" role="group" aria-label="Tamanho"></div>
+        <div class="price-row"><div class="price"><small>R$</small><span class="pv"></span></div><button class="btn btn-fire add">Adicionar</button></div>
+      </div>
+    </article>
+    <article class="card rv" data-name="Chama Viva" data-prices='{"Combo M":"54,90","Combo G":"62,90"}'>
+      <span class="tag">COMBO</span>
+      <div class="art combo" data-combo></div>
+      <div class="card-body">
+        <h3 class="display">Chama Viva</h3>
+        <p>Hambúrguer artesanal com cheddar, batata rústica crocante e refrigerante gelado à sua escolha.</p>
+        <div class="sizes" role="group" aria-label="Tamanho"></div>
+        <div class="price-row"><div class="price"><small>R$</small><span class="pv"></span></div><button class="btn btn-fire add">Adicionar</button></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- 5. COMBO DIA DE JOGO -->
+<section class="combo-sec" aria-labelledby="h-combo">
+  <div class="art" aria-hidden="true" data-box></div>
+  <div class="copy rv">
+    <span class="eyebrow">Para dividir (ou não)</span>
+    <h2 class="display" id="h-combo">Combo<br>Dia de Jogo</h2>
+    <p>Hambúrgueres, molhos, batatas e shakes embalados fresquinhos, prontos para retirar ou receber em casa.</p>
+    <div class="big-price">R$ 119,90</div>
+    <a class="btn btn-fire" href="#cardapio">Quero esse</a>
+  </div>
+</section>
+
+<!-- 6. SHAKES -->
+<section class="shakes" aria-labelledby="h-shakes">
+  <div class="rv">
+    <span class="eyebrow">Sobremesa que decide o jogo</span>
+    <h2 class="display" id="h-shakes">Shakes da<br>Prorrogação</h2>
+    <p>Cremosos, grossos e caprichados. Feitos com sorvete de verdade, calda caseira e finalização crocante.</p>
+    <ul class="flavors">
+      <li><span>Brigadeiro com biscoito</span><span>R$ 21,90</span></li>
+      <li><span>Doce de leite com paçoca</span><span>R$ 22,90</span></li>
+      <li><span>Morango do campo</span><span>R$ 20,90</span></li>
+    </ul>
+    <a class="btn btn-line" href="#cardapio">Pedir um shake</a>
+  </div>
+  <div class="art rv" aria-hidden="true" data-shake></div>
+</section>
+
+<!-- 7. FECHO -->
+<section class="finale" aria-labelledby="h-fin">
+  <div class="box rv" aria-hidden="true">
+    <div class="lid"></div>
+    <div class="front">
+      <svg class="emblem"><use href="#emblem"/></svg>
+      <h3 class="display">Sabor<br>da Brasa<span>Hamburgueria</span></h3>
+    </div>
+    <div class="motto"><i></i>Feito fresco ★ Feito ousado<i></i></div>
+  </div>
+  <h2 class="display rv" id="h-fin">Bateu a fome?</h2>
+  <p class="rv">Peça agora e receba quentinho. Retirada na loja em 15 minutos.</p>
+  <a class="btn btn-fire rv" href="#cardapio">Fazer meu pedido</a>
+</section>
+
+</main>
+
+<footer id="endereco">
+  <div>
+    <a href="#topo" class="logo" style="margin-bottom:14px"><svg aria-hidden="true"><use href="#emblem"/></svg>Sabor da Brasa</a>
+    <p>Hambúrgueres amassados na hora, desde 2019. Marca, endereço e telefones fictícios.</p>
+  </div>
+  <div>
+    <h4>Endereço</h4>
+    <ul><li>Rua das Brasas, 1010</li><li>Centro · Cidade Exemplo/UF</li><li>CEP 00000-000</li></ul>
+  </div>
+  <div>
+    <h4>Horário</h4>
+    <ul><li>Ter a qui: 18h às 23h</li><li>Sex e sáb: 18h à 1h</li><li>Dom: 17h às 22h</li></ul>
+  </div>
+  <div>
+    <h4>Contato</h4>
+    <ul><li><a href="tel:+5500900000000">(00) 90000-0000</a></li><li><a href="mailto:oi@exemplo.com">oi@exemplo.com</a></li><li>@saborbrasa.exemplo</li></ul>
+  </div>
+</footer>
+
+<div class="demo-pill">Site fictício para demonstração · nenhum pedido é enviado</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- ilustrações em SVG (sem fotos) ---------- */
+var uid = 0;
+function burger(opt){
+  var n = ++uid, o = opt === 'smoke'
+    ? {bun1:'#e8a23a', bun2:'#a85d1c', sauce:'#7a2a14', cheese:'#ffb21e', patty:'#3b1b10', extra:true}
+    : {bun1:'#f3b04a', bun2:'#b8661f', sauce:'#f2d9a4', cheese:'#f7ab14', patty:'#4a2415', extra:false};
+  var seeds = '';
+  [[100,112],[130,102],[165,100],[198,110],[120,134],[152,126],[184,132],[212,128],[88,142],[236,144],[140,150],[176,152]].forEach(function(s){
+    seeds += '<ellipse cx="'+s[0]+'" cy="'+s[1]+'" rx="5" ry="2.6" transform="rotate('+(s[0]%40-20)+' '+s[0]+' '+s[1]+')" fill="#fbeab8"/>';
+  });
+  var bacon = o.extra ? '<path d="M56 200q22-9 44 0t44 0t44 0t40 0v7q-20 8-40 0t-44 0t-44 0t-44 0z" fill="#b33a22" stroke="#e86a4a" stroke-width="2"/>' : '';
+  return '<svg class="burger" viewBox="0 0 300 420" role="img" aria-label="Hambúrguer ilustrado">'+
+  '<defs>'+
+   '<linearGradient id="b'+n+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+o.bun1+'"/><stop offset="1" stop-color="'+o.bun2+'"/></linearGradient>'+
+   '<linearGradient id="c'+n+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd04a"/><stop offset="1" stop-color="'+o.cheese+'"/></linearGradient>'+
+   '<linearGradient id="p'+n+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b3a22"/><stop offset="1" stop-color="'+o.patty+'"/></linearGradient>'+
+  '</defs>'+
+  '<g transform="translate(0,14)">'+
+   '<g class="ly" style="--i:0"><path d="M52 170C52 110 100 88 150 88s98 22 98 82c0 8-8 14-16 14H68c-8 0-16-6-16-14z" fill="url(#b'+n+')"/><ellipse cx="120" cy="112" rx="46" ry="14" fill="#fff" opacity=".2" transform="rotate(-12 120 112)"/>'+seeds+'</g>'+
+   '<g class="ly" style="--i:1"><path d="M62 184h176c8 0 8 12-2 14-16 6-22-2-38 2-18 6-28-4-48 0-20 5-32-4-50 0-16 4-24-4-36-2-10-2-10-14-2-14z" fill="'+o.sauce+'"/></g>'+
+   '<g class="ly" style="--i:2">'+(o.extra ? bacon : '<path d="M58 202q20-9 40 0t40 0t40 0t40 0v10q-20 9-40 0t-40 0t-40 0t-40 0z" fill="#9a5a22"/><path d="M64 204q18-6 34 0M142 204q18-6 34 0M196 206q18-6 34 0" stroke="#d99a4a" stroke-width="3" fill="none" stroke-linecap="round"/>')+'</g>'+
+   '<g class="ly" style="--i:3"><path d="M54 212h192l-6 8-14-2-4 20q-4 8-8 0l-4-16-60 4-30-2-8 22q-4 8-8 0l-6-22-34-2z" fill="url(#c'+n+')"/></g>'+
+   '<g class="ly" style="--i:4"><rect x="56" y="224" width="188" height="32" rx="15" fill="url(#p'+n+')"/><g fill="#2a120a" opacity=".55"><circle cx="90" cy="236" r="3"/><circle cx="130" cy="242" r="3.5"/><circle cx="170" cy="235" r="3"/><circle cx="210" cy="242" r="3"/></g><path d="M62 230q88-8 176 0" stroke="#8a4f2e" stroke-width="2" fill="none" opacity=".6"/></g>'+
+   '<g class="ly" style="--i:5"><path d="M60 258h180c8 0 10 6 8 12-4 14-20 20-38 20H90c-18 0-34-6-38-20-2-6 0-12 8-12z" fill="url(#b'+n+')"/></g>'+
+  '</g></svg>';
+}
+function comboArt(){
+  var fries = '';
+  for (var i=0;i<16;i++){ var x=108+i*7, h=60+(i*13%26); fries += '<rect x="'+x+'" y="'+(112-h/2)+'" width="7" height="'+h+'" rx="2" fill="'+(i%3?'#ffc93a':'#f1ae1c')+'" transform="rotate('+((i-8)*3)+' '+(x+3)+' 150)"/>'; }
+  return '<svg viewBox="0 0 400 300" role="img" aria-label="Combo com hambúrguer, batata e refrigerante">'+
+   '<defs><linearGradient id="cx" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3b04a"/><stop offset="1" stop-color="#b8661f"/></linearGradient></defs>'+
+   '<text x="200" y="64" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="46" fill="#fff" opacity=".92" letter-spacing="3">COMBO</text>'+
+   fries+
+   '<path d="M104 160h120l-12 100a8 8 0 0 1-8 7h-80a8 8 0 0 1-8-7z" fill="#d7261b"/><path d="M104 160h120l-3 24H107z" fill="#f4f2ee"/>'+
+   '<g transform="translate(40 90) scale(.52)">'+
+    '<path d="M52 170C52 110 100 88 150 88s98 22 98 82c0 8-8 14-16 14H68c-8 0-16-6-16-14z" fill="url(#cx)"/>'+
+    '<path d="M54 184h192l-6 8-14-2-4 20q-4 8-8 0l-4-16-60 4-30-2-8 22q-4 8-8 0l-6-22-34-2z" fill="#f7ab14"/>'+
+    '<rect x="56" y="204" width="188" height="32" rx="15" fill="#4a2415"/>'+
+    '<path d="M60 238h180c8 0 10 6 8 12-4 14-20 20-38 20H90c-18 0-34-6-38-20-2-6 0-12 8-12z" fill="url(#cx)"/></g>'+
+   '<path d="M262 130h74l-9 130a8 8 0 0 1-8 7h-40a8 8 0 0 1-8-7z" fill="#f4f2ee"/><path d="M265 170h68l-3 44h-62z" fill="#d7261b"/>'+
+   '<rect x="256" y="118" width="86" height="14" rx="4" fill="#2a2a31"/><rect x="296" y="84" width="6" height="40" rx="3" fill="#fff" transform="rotate(12 299 104)"/>'+
+  '</svg>';
+}
+function boxArt(){
+  var fr = '';
+  for (var i=0;i<14;i++){ fr += '<rect x="'+(332+i*8)+'" y="'+(170-(i*9%20))+'" width="7" height="'+(70+(i*7%18))+'" rx="2" fill="'+(i%3?'#ffc93a':'#f1ae1c')+'" transform="rotate('+((i-7)*4)+' '+(336+i*8)+' 240)"/>'; }
+  var sd = '';
+  [[210,140],[240,134],[275,130],[300,126],[225,160],[262,154]].forEach(function(s){ sd += '<ellipse cx="'+s[0]+'" cy="'+s[1]+'" rx="4" ry="2" fill="#fbeab8"/>'; });
+  return '<svg viewBox="0 0 700 460" role="img" aria-label="Caixa do combo vista de cima">'+
+   '<defs><linearGradient id="bx" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a1a20"/><stop offset="1" stop-color="#08080a"/></linearGradient>'+
+   '<radialGradient id="bn" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#f7bf5a"/><stop offset="1" stop-color="#a85d1c"/></radialGradient>'+
+   '<radialGradient id="wh" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e6d3c4"/></radialGradient></defs>'+
+   '<polygon points="40,110 620,50 670,380 90,430" fill="url(#bx)" stroke="#2c2c34" stroke-width="3"/>'+
+   '<polygon points="60,128 600,72 648,364 104,412" fill="none" stroke="#24242b" stroke-width="2"/>'+
+   '<g transform="rotate(-6 200 220)">'+
+    '<circle cx="200" cy="230" r="92" fill="#16161b" stroke="#2c2c34" stroke-width="2"/>'+
+    '<circle cx="200" cy="230" r="76" fill="url(#bn)"/><ellipse cx="180" cy="200" rx="40" ry="22" fill="#fff" opacity=".22"/>'+sd+
+    '<path d="M126 238q20 18 40 8t40 8t40-8t30-6" stroke="#f7ab14" stroke-width="10" fill="none" stroke-linecap="round" opacity=".95"/>'+
+   '</g>'+
+   fr+
+   '<g transform="rotate(-6 560 150)"><circle cx="545" cy="150" r="56" fill="#24242b"/><circle cx="545" cy="150" r="46" fill="#4b2a1e"/><circle cx="545" cy="150" r="34" fill="url(#wh)"/><circle cx="535" cy="140" r="4" fill="#3a1d12"/><circle cx="556" cy="156" r="4" fill="#3a1d12"/><circle cx="540" cy="162" r="3" fill="#3a1d12"/><path d="M515 138q16 10 32 0" stroke="#7a3320" stroke-width="5" fill="none" stroke-linecap="round"/></g>'+
+   '<circle cx="330" cy="110" r="20" fill="#0c0c10" stroke="#2c2c34" stroke-width="2"/><circle cx="330" cy="110" r="14" fill="#ff8a3d"/>'+
+   '<circle cx="386" cy="104" r="20" fill="#0c0c10" stroke="#2c2c34" stroke-width="2"/><circle cx="386" cy="104" r="14" fill="#8e1e17"/>'+
+   '<g transform="translate(120 360) rotate(-6)"><circle r="30" fill="#e8472b"/><path d="M0-18c5 9 15 13 12 26-1 8-8 14-12 14s-11-6-12-14c-1-6 4-9 5-14 2 3 4 4 5 4-1-6-1-10 2-16z" fill="#fff"/></g>'+
+   '<text x="170" y="380" font-family="Anton,Impact,sans-serif" font-size="30" fill="#fff" letter-spacing="3" transform="rotate(-6 170 380)">SABOR DA BRASA</text>'+
+  '</svg>';
+}
+function shakeArt(){
+  var crumbs = '';
+  [[150,92],[190,70],[232,96],[270,80],[210,60],[170,68],[250,64]].forEach(function(c,i){ crumbs += '<rect x="'+c[0]+'" y="'+c[1]+'" width="16" height="10" rx="3" fill="'+(i%2?'#2b150e':'#4a2a1c')+'" transform="rotate('+(i*37)+' '+c[0]+' '+c[1]+')"/>'; });
+  return '<svg viewBox="0 0 560 520" role="img" aria-label="Shake com calda e biscoito">'+
+   '<defs><linearGradient id="sk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e7d3c3"/><stop offset=".5" stop-color="#fbeee2"/><stop offset="1" stop-color="#cdb6a4"/></linearGradient>'+
+   '<linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".05"/><stop offset=".3" stop-color="#ffffff" stop-opacity=".35"/><stop offset="1" stop-color="#ffffff" stop-opacity=".05"/></linearGradient></defs>'+
+   '<ellipse cx="280" cy="484" rx="150" ry="18" fill="#000" opacity=".5"/>'+
+   '<path d="M120 150h320l-34 322q-2 12-14 12H168q-12 0-14-12z" fill="url(#sk)"/>'+
+   '<path d="M132 220q40 30 62 0t60 6 60-4 66 8l-12 80q-30-14-60 0t-60-6-62 6q-20-6-40 2z" fill="#4b2214" opacity=".92"/>'+
+   '<path d="M138 300q40 24 62 0t60 4 60-4 64 6l-10 70q-30-12-60 0t-60-6-64 6q-20-4-34 0z" fill="#6a3320" opacity=".85"/>'+
+   '<path d="M120 150h320l-34 322q-2 12-14 12H168q-12 0-14-12z" fill="url(#gl)"/>'+
+   '<path d="M104 150q0-30 40-44 6-44 54-52 40-28 84-8 50-14 78 22 40 6 48 44 8 20-18 30z" fill="#fff4ea"/>'+
+   '<path d="M130 112q40-16 80-6M300 70q40-8 70 14" stroke="#f1dccb" stroke-width="8" fill="none" stroke-linecap="round"/>'+
+   crumbs+
+   '<path d="M210 80q20 20 6 52t14 42" stroke="#3b1b10" stroke-width="10" fill="none" stroke-linecap="round" opacity=".85"/>'+
+   '<rect x="318" y="20" width="14" height="150" rx="7" fill="#e8472b" transform="rotate(14 325 95)"/>'+
+   '<circle cx="280" cy="400" r="46" fill="#e8472b"/><path d="M280 366c6 12 20 18 16 36-2 10-10 18-16 18s-14-8-16-18c-1-8 5-12 7-18 2 4 5 5 6 5-1-7-1-14 3-23z" fill="#fff"/>'+
+  '</svg>';
+}
+
+/* ---------- montagem ---------- */
+document.querySelectorAll('[data-burger]').forEach(function(el){ el.innerHTML = burger(el.dataset.opt); });
+document.querySelectorAll('[data-combo]').forEach(function(el){ el.innerHTML = comboArt(); });
+document.querySelectorAll('[data-box]').forEach(function(el){ el.innerHTML = boxArt(); });
+document.querySelectorAll('[data-shake]').forEach(function(el){ el.innerHTML = shakeArt(); });
+
+/* hero: hambúrguer fica montado (sem separar) */
+document.querySelectorAll('.scene .burger, .hero .burger').forEach(function(b){ b.style.setProperty('--p', 0); });
+/* cards: sem separar */
+document.querySelectorAll('.card .burger').forEach(function(b){ b.style.setProperty('--p', 0); });
+
+/* ---------- cardápio: tamanhos, preço e pedido ---------- */
+var count = 0, countEl = document.getElementById('count'), toastEl = document.getElementById('toast'), tt;
+function toast(msg){ toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ toastEl.classList.remove('show'); }, 2200); }
+document.querySelectorAll('.card').forEach(function(card){
+  var prices = JSON.parse(card.dataset.prices), keys = Object.keys(prices), sizes = card.querySelector('.sizes'), pv = card.querySelector('.pv'), cur = keys[0];
+  keys.forEach(function(k, i){
+    var b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = k; b.setAttribute('aria-pressed', i === 0);
+    b.addEventListener('click', function(){ cur = k; sizes.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c === b); }); pv.textContent = prices[k]; });
+    sizes.appendChild(b);
+  });
+  pv.textContent = prices[cur];
+  card.querySelector('.add').addEventListener('click', function(){
+    count++; countEl.textContent = count; countEl.hidden = false;
+    toast(card.dataset.name + ' (' + cur + ') adicionado ao pedido');
+  });
+});
+
+/* ---------- rolagem: separar camadas, painel, legendas, revelar ---------- */
+var scrubs = [].slice.call(document.querySelectorAll('[data-scrub]'));
+function onScroll(){
+  var vh = window.innerHeight;
+  scrubs.forEach(function(s){
+    var r = s.getBoundingClientRect(), total = s.offsetHeight - vh;
+    var p = Math.min(1, Math.max(0, -r.top / total));
+    if (s.classList.contains('smash')) { s.style.setProperty('--p', p.toFixed(3)); }
+    if (s.hasAttribute('data-labels')) {
+      var open = r.top < vh * 0.15;
+      s.classList.toggle('on', open);
+    }
+  });
+}
+var ticking = false;
+window.addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(function(){ onScroll(); ticking = false; }); } }, {passive:true});
+window.addEventListener('resize', onScroll);
+onScroll();
+
+/* a seção "empilhado" abre as camadas conforme rola */
+var stackSec = document.querySelector('.stack');
+function stackProgress(){
+  var r = stackSec.getBoundingClientRect(), total = stackSec.offsetHeight - window.innerHeight;
+  var p = Math.min(1, Math.max(0, -r.top / total));
+  stackSec.style.setProperty('--p', Math.min(1, p * 2.2).toFixed(3));
+  stackSec.classList.toggle('on', p > 0.4);
+}
+window.addEventListener('scroll', stackProgress, {passive:true});
+window.addEventListener('resize', stackProgress);
+stackProgress();
+
+var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, {threshold:.15});
+document.querySelectorAll('.rv').forEach(function(el, i){ el.style.transitionDelay = (i % 3) * 90 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>
