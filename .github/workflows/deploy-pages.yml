@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "code_descompactado.zip"
+      - "cafeteria/**"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -46,6 +47,9 @@ jobs:
       - name: Build static site
         working-directory: site
         run: npx vite build --base=/${{ github.event.repository.name }}/
+
+      - name: Add cafeteria site
+        run: cp -r cafeteria site/dist/public/cafeteria
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
