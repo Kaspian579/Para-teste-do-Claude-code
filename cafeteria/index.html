@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Torra Lenta Café</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Torra Lenta, cafeteria de café especial torrado devagar. Cardápio, origem do grão e horários.">
+<meta name="theme-color" content="#17110d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: uma coluna pensada para o polegar; seções empilhadas que entram e saem ao rolar; barra de navegação fixa embaixo no celular. */
+:root {
+  /* Escuro primeiro: grão torrado + crema */
+  --bg: #17110d;
+  --surface: #211812;
+  --line: #3b2c21;
+  --fg: #f2e5d4;
+  --muted: #b6a28f;
+  --accent: #e3a55a;
+  --accent-ink: #1b120c;
+  --steam: rgba(242, 229, 212, .55);
+
+  --font-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --header-h: 60px;
+  --nav-h: 64px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #ede4d8; --surface: #f7f1e9; --line: #d6c6b3; --fg: #2a1c13; --muted: #6f5847;
+    --accent: #9a5716; --accent-ink: #fbf5ee; --steam: rgba(42, 28, 19, .35);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #ede4d8; --surface: #f7f1e9; --line: #d6c6b3; --fg: #2a1c13; --muted: #6f5847;
+  --accent: #9a5716; --accent-ink: #fbf5ee; --steam: rgba(42, 28, 19, .35);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 1rem/1.6 var(--font-body);
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 30; background: var(--bg);
+}
+img, svg { max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.05; }
+p { margin: 0; }
+.wrap {
+  width: 100%; max-width: 1080px; margin-inline: auto;
+  padding-left: var(--gutter-l); padding-right: var(--gutter-r);
+}
+.eyebrow {
+  font: 500 .75rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent);
+}
+section { scroll-margin-top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); }
+
+/* ---------- Barra de progresso (nível da xícara) ---------- */
+.progress {
+  position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; height: 3px; z-index: 40;
+  background: var(--accent); transform-origin: 0 50%; transform: scaleX(0);
+}
+
+/* ---------- Cabeçalho que some ao descer e volta ao subir ---------- */
+.header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: transform 260ms var(--ease-out), border-color 200ms ease;
+}
+.header.is-hidden { transform: translateY(calc(-100% - env(safe-area-inset-top, 0px))); }
+.header.is-scrolled { border-bottom-color: var(--line); }
+.header .wrap { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 800 1.15rem/1 var(--font-display); letter-spacing: -.01em; }
+.logo svg { width: 28px; height: 28px; color: var(--accent); }
+.top-links { display: none; gap: 28px; }
+.top-links a { text-decoration: none; color: var(--muted); font-weight: 500; transition: color 160ms ease; }
+.top-links a[aria-current="true"] { color: var(--fg); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 20px; border-radius: 999px; border: 0;
+  background: var(--accent); color: var(--accent-ink);
+  font: 600 .95rem/1 var(--font-body); text-decoration: none; cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+.btn:active { transform: scale(.97); }
+.btn--ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--line); }
+
+/* ---------- Hero ---------- */
+.hero { padding-block: 40px 56px; overflow: hidden; }
+.hero .wrap { display: grid; gap: 28px; }
+.hero-copy { display: grid; gap: 18px; will-change: transform, opacity; }
+.hero h1 { font-size: clamp(2.6rem, 11vw, 5.2rem); font-weight: 800; letter-spacing: -.03em; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lead { color: var(--muted); font-size: 1.08rem; max-width: 34ch; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.status {
+  display: inline-flex; align-items: center; gap: 8px; width: fit-content;
+  font: 500 .8rem/1 var(--font-mono); color: var(--muted);
+  padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
+}
+.status i { width: 8px; height: 8px; border-radius: 50%; background: #6fbf73; }
+.status.is-closed i { background: #d0675c; }
+.cup { width: min(78%, 320px); justify-self: center; color: var(--fg); will-change: transform; }
+.cup .liquid { fill: var(--accent); }
+.cup .steam path { fill: none; stroke: var(--steam); stroke-width: 3; stroke-linecap: round; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .cup .steam path { animation: steam 3.2s ease-in-out infinite; transform-box: fill-box; }
+  .cup .steam path:nth-child(2) { animation-delay: .6s; }
+  .cup .steam path:nth-child(3) { animation-delay: 1.2s; }
+  /* Entrada do topo: uma vez, ao carregar */
+  .hero-copy > *, .cup { animation: rise 900ms var(--ease-out) backwards; }
+  .hero-copy > :nth-child(2) { animation-delay: 70ms; }
+  .hero-copy > :nth-child(3) { animation-delay: 140ms; }
+  .hero-copy > :nth-child(4) { animation-delay: 210ms; }
+  .cup { animation-delay: 160ms; }
+}
+@keyframes steam {
+  0%   { opacity: 0; transform: translateY(10px); }
+  35%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-14px); }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+/* ---------- Revelar ao rolar (aparece e some) ---------- */
+[data-reveal] {
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+}
+.reveal-ready [data-reveal]:not([data-visible]) { opacity: 0; transform: translateY(32px) scale(.98); }
+.reveal-ready [data-reveal][data-side="above"]:not([data-visible]) { transform: translateY(-32px) scale(.98); }
+.reveal-ready [data-reveal][data-visible] { transition-delay: calc(var(--i, 0) * 70ms); }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { transition: opacity 300ms ease; }
+  .reveal-ready [data-reveal]:not([data-visible]),
+  .reveal-ready [data-reveal][data-side="above"]:not([data-visible]) { opacity: 0; transform: none; }
+  .reveal-ready [data-reveal][data-visible] { transition-delay: 0ms; }
+  html .panel:not([hidden]) { animation: none; }
+}
+
+/* ---------- Seções ---------- */
+.block { padding-block: 72px; border-top: 1px solid var(--line); }
+.block-head { display: grid; gap: 12px; margin-bottom: 32px; }
+.block h2 { font-size: clamp(2rem, 8vw, 3.4rem); font-weight: 700; letter-spacing: -.02em; }
+.block-head p { color: var(--muted); max-width: 52ch; }
+
+/* O grão */
+.origin { display: grid; gap: 28px; }
+.specs { margin: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.specs div { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.specs dt { color: var(--muted); }
+.specs dd { margin: 0; font: 500 .95rem/1.4 var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
+.score {
+  display: grid; gap: 6px; padding: 24px; border-radius: 20px; background: var(--surface);
+}
+.score b { font: 800 4.5rem/1 var(--font-display); color: var(--accent); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.score span { color: var(--muted); font-size: .95rem; }
+.notes { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
+.notes li { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); font-size: .9rem; }
+
+/* Cardápio */
+.tabs {
+  position: relative; display: flex; gap: 4px; padding: 4px; margin-bottom: 20px;
+  border-radius: 999px; background: var(--surface); overflow-x: auto; scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  position: relative; z-index: 1; flex: 1 0 auto; min-height: 40px; padding: 0 12px;
+  border: 0; border-radius: 999px; background: none; color: var(--muted);
+  font: 600 .875rem/1 var(--font-body); white-space: nowrap; cursor: pointer; transition: color 200ms ease;
+}
+.tab[aria-selected="true"] { color: var(--accent-ink); }
+.tab-pill {
+  position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 0; border-radius: 999px;
+  background: var(--accent); transition: transform 280ms var(--ease-in-out), width 280ms var(--ease-in-out);
+}
+.panel { display: grid; gap: 0; }
+.panel:not([hidden]) { animation: fade 240ms var(--ease-out); }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } }
+.item {
+  display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: baseline;
+  padding: 16px 0; border-bottom: 1px solid var(--line);
+}
+.item h3 { font: 600 1.08rem/1.3 var(--font-body); }
+.item .price { font: 500 1rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--accent); }
+.item p { grid-column: 1 / -1; color: var(--muted); font-size: .92rem; }
+.item small { font: 400 .78rem/1 var(--font-mono); color: var(--muted); letter-spacing: .02em; }
+
+/* Processo */
+.steps { position: relative; padding-left: 36px; }
+.steps-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 36px; }
+.steps::before, .steps-fill {
+  content: ""; position: absolute; left: 11px; top: 6px; bottom: 6px; width: 2px; border-radius: 2px;
+}
+.steps::before { background: var(--line); }
+.steps-fill { background: var(--accent); transform-origin: 50% 0; transform: scaleY(0); }
+.step { position: relative; display: grid; gap: 6px; }
+.step::before {
+  content: ""; position: absolute; left: -31px; top: 6px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--bg); box-shadow: inset 0 0 0 2px var(--accent);
+}
+.step .eyebrow { color: var(--muted); }
+.step h3 { font-size: 1.5rem; font-weight: 700; }
+.step p { color: var(--muted); max-width: 46ch; }
+.step .metric { font: 500 .9rem/1.4 var(--font-mono); color: var(--fg); font-variant-numeric: tabular-nums; }
+
+/* Espaço */
+.perks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.perk { padding: 20px; border-radius: 18px; background: var(--surface); display: grid; gap: 8px; align-content: start; }
+.perk svg { width: 26px; height: 26px; color: var(--accent); }
+.perk h3 { font: 600 1rem/1.3 var(--font-body); }
+.perk p { color: var(--muted); font-size: .9rem; }
+
+/* Visite */
+.visit { display: grid; gap: 28px; }
+.address { font: 700 clamp(1.6rem, 6.5vw, 2.4rem)/1.15 var(--font-display); letter-spacing: -.01em; }
+.hours { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.hours td { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.hours td:last-child { text-align: right; font-family: var(--font-mono); font-size: .95rem; }
+.hours tr.is-today td { color: var(--accent); font-weight: 600; }
+
+.footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+.footer .wrap { display: grid; gap: 6px; }
+
+/* ---------- Navegação inferior (celular) ---------- */
+.bottom-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+  padding: 6px var(--gutter-r) calc(6px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.bottom-nav a {
+  display: grid; justify-items: center; gap: 3px; padding: 6px 0; min-height: 52px; border-radius: 12px;
+  text-decoration: none; color: var(--muted); font: 500 .72rem/1 var(--font-body);
+  transition: color 200ms ease;
+}
+.bottom-nav svg { width: 22px; height: 22px; transition: transform 200ms var(--ease-out); }
+.bottom-nav a[aria-current="true"] { color: var(--accent); }
+.bottom-nav a[aria-current="true"] svg { transform: translateY(-2px); }
+.bottom-nav a:active svg { transform: scale(.9); }
+
+/* ---------- Telas maiores ---------- */
+@media (min-width: 760px) {
+  body { padding-bottom: 0; }
+  .bottom-nav { display: none; }
+  .top-links { display: flex; }
+  .hero { padding-block: 72px 96px; }
+  .hero .wrap { grid-template-columns: 1.3fr 1fr; align-items: center; }
+  .origin { grid-template-columns: 1fr 1.2fr; align-items: start; }
+  .perks { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .visit { grid-template-columns: 1fr 1fr; align-items: start; }
+  .block { padding-block: 112px; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: translateY(-1px); }
+  .top-links a:hover { color: var(--fg); }
+  .item { transition: transform 200ms var(--ease-out); }
+  .item:hover { transform: translateX(4px); }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="header" id="header">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Torra Lenta, voltar ao início">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="16" rx="10" ry="14" transform="rotate(30 16 16)" fill="currentColor"/><path d="M11 6c6 5 4 15 10 20" stroke="var(--bg)" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>
+      Torra Lenta
+    </a>
+    <nav class="top-links" aria-label="Seções">
+      <a href="#grao" data-nav="grao">O grão</a>
+      <a href="#cardapio" data-nav="cardapio">Cardápio</a>
+      <a href="#processo" data-nav="processo">Processo</a>
+      <a href="#visite" data-nav="visite">Visite</a>
+    </nav>
+    <a class="btn" href="#cardapio">Ver cardápio</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="wrap">
+      <div class="hero-copy" id="heroCopy">
+        <span class="status" id="status"><i></i><span>Aberto hoje das 7h às 20h</span></span>
+        <h1>Café de torra lenta, <em>servido sem pressa.</em></h1>
+        <p class="lead">Grãos de um único sítio na Serra da Mantiqueira, torrados aqui duas vezes por semana e passados na hora.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#cardapio">Ver cardápio</a>
+          <a class="btn btn--ghost" href="#visite">Como chegar</a>
+        </div>
+      </div>
+      <svg class="cup" id="cup" viewBox="0 0 240 220" role="img" aria-label="Xícara de café fumegante">
+        <g class="steam">
+          <path d="M92 70c-10-12 10-20 0-34"/>
+          <path d="M120 66c-10-12 10-22 0-38"/>
+          <path d="M148 70c-10-12 10-20 0-34"/>
+        </g>
+        <ellipse cx="120" cy="196" rx="96" ry="14" fill="currentColor" opacity=".12"/>
+        <path d="M52 92h136l-10 74a28 28 0 0 1-28 24H90a28 28 0 0 1-28-24z" fill="currentColor"/>
+        <path d="M186 108h10a22 22 0 0 1 0 44h-14" fill="none" stroke="currentColor" stroke-width="10"/>
+        <ellipse class="liquid" cx="120" cy="92" rx="68" ry="9"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="block" id="grao" aria-labelledby="grao-t">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="eyebrow" data-reveal>O grão</span>
+        <h2 id="grao-t" data-reveal style="--i:1">Um sítio, uma variedade, nenhuma mistura.</h2>
+        <p data-reveal style="--i:2">Compramos a safra inteira do Sítio Pedra Branca. Você sabe de onde vem cada xícara.</p>
+      </div>
+      <div class="origin">
+        <div class="score" data-reveal>
+          <span class="eyebrow">Pontuação SCA</span>
+          <b>86</b>
+          <span>Acima de 80 pontos o café é considerado especial pela Specialty Coffee Association.</span>
+          <ul class="notes" aria-label="Notas de sabor">
+            <li>chocolate ao leite</li><li>laranja</li><li>rapadura</li>
+          </ul>
+        </div>
+        <dl class="specs">
+          <div data-reveal style="--i:0"><dt>Origem</dt><dd>Serra da Mantiqueira, MG</dd></div>
+          <div data-reveal style="--i:1"><dt>Altitude</dt><dd>1.250 m</dd></div>
+          <div data-reveal style="--i:2"><dt>Variedade</dt><dd>Catuaí Amarelo</dd></div>
+          <div data-reveal style="--i:3"><dt>Processo</dt><dd>Natural</dd></div>
+          <div data-reveal style="--i:4"><dt>Torra</dt><dd>Média · 12 min</dd></div>
+          <div data-reveal style="--i:5"><dt>Safra</dt><dd>2026</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="cardapio" aria-labelledby="cardapio-t">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="eyebrow" data-reveal>Cardápio</span>
+        <h2 id="cardapio-t" data-reveal style="--i:1">Do espresso ao coado, tudo com o mesmo grão.</h2>
+      </div>
+      <div data-reveal style="--i:2">
+        <div class="tabs" role="tablist" aria-label="Categorias do cardápio" id="tabs">
+          <span class="tab-pill" id="tabPill" aria-hidden="true"></span>
+          <button class="tab" role="tab" id="tab-espresso" aria-controls="p-espresso" aria-selected="true">Espresso</button>
+          <button class="tab" role="tab" id="tab-coado" aria-controls="p-coado" aria-selected="false" tabindex="-1">Coados</button>
+          <button class="tab" role="tab" id="tab-gelados" aria-controls="p-gelados" aria-selected="false" tabindex="-1">Gelados</button>
+          <button class="tab" role="tab" id="tab-comer" aria-controls="p-comer" aria-selected="false" tabindex="-1">Para comer</button>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-espresso" aria-labelledby="tab-espresso">
+          <div class="item"><h3>Espresso</h3><span class="price">R$ 7</span><p>Curto e encorpado. <small>18 g → 36 g · 28 s</small></p></div>
+          <div class="item"><h3>Cortado</h3><span class="price">R$ 11</span><p>Espresso com um pouco de leite vaporizado. <small>90 ml</small></p></div>
+          <div class="item"><h3>Cappuccino</h3><span class="price">R$ 14</span><p>Espuma cremosa e desenho na superfície. <small>180 ml</small></p></div>
+          <div class="item"><h3>Flat white</h3><span class="price">R$ 15</span><p>Espresso duplo e leite sedoso, menos espuma. <small>160 ml</small></p></div>
+          <div class="item"><h3>Mocha da casa</h3><span class="price">R$ 17</span><p>Espresso, leite e chocolate 70% derretido. <small>220 ml</small></p></div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-coado" aria-labelledby="tab-coado" hidden>
+          <div class="item"><h3>V60</h3><span class="price">R$ 16</span><p>Limpo e aromático, realça a laranja. <small>15 g · 250 ml · 93 °C</small></p></div>
+          <div class="item"><h3>Chemex para dois</h3><span class="price">R$ 28</span><p>Filtro grosso, xícara leve e doce. <small>30 g · 500 ml</small></p></div>
+          <div class="item"><h3>Prensa francesa</h3><span class="price">R$ 15</span><p>Mais corpo, ótimo com bolo. <small>4 min de infusão</small></p></div>
+          <div class="item"><h3>Aeropress</h3><span class="price">R$ 16</span><p>Intenso e rápido, receita invertida. <small>15 g · 200 ml</small></p></div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-gelados" aria-labelledby="tab-gelados" hidden>
+          <div class="item"><h3>Cold brew</h3><span class="price">R$ 17</span><p>Extraído a frio por 18 horas. <small>300 ml</small></p></div>
+          <div class="item"><h3>Espresso tônica</h3><span class="price">R$ 18</span><p>Água tônica, gelo e espresso por cima. <small>250 ml</small></p></div>
+          <div class="item"><h3>Latte gelado</h3><span class="price">R$ 16</span><p>Leite gelado e espresso duplo. <small>300 ml</small></p></div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-comer" aria-labelledby="tab-comer" hidden>
+          <div class="item"><h3>Pão de queijo</h3><span class="price">R$ 12</span><p>Três unidades, saem do forno a cada 30 minutos.</p></div>
+          <div class="item"><h3>Bolo de fubá com goiabada</h3><span class="price">R$ 13</span><p>Fatia generosa, receita de família.</p></div>
+          <div class="item"><h3>Croissant de manteiga</h3><span class="price">R$ 14</span><p>Massa folhada feita aqui, 48 h de fermentação.</p></div>
+          <div class="item"><h3>Tostex de queijo e tomate</h3><span class="price">R$ 22</span><p>Pão de fermentação natural na chapa.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="processo" aria-labelledby="processo-t">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="eyebrow" data-reveal>Do grão à xícara</span>
+        <h2 id="processo-t" data-reveal style="--i:1">Seis etapas, nenhuma com pressa.</h2>
+      </div>
+      <div class="steps" id="steps">
+        <span class="steps-fill" id="stepsFill" aria-hidden="true"></span>
+        <ol class="steps-list">
+        <li class="step" data-reveal><span class="eyebrow">Etapa 1</span><h3>Colheita seletiva</h3><p>Só as cerejas vermelhas e maduras, colhidas à mão.</p><span class="metric">junho a setembro</span></li>
+        <li class="step" data-reveal><span class="eyebrow">Etapa 2</span><h3>Secagem no terreiro</h3><p>O grão seca ao sol dentro da própria fruta, o que traz a doçura.</p><span class="metric">20 dias · até 11% de umidade</span></li>
+        <li class="step" data-reveal><span class="eyebrow">Etapa 3</span><h3>Torra lenta</h3><p>Torramos aqui, toda terça e sexta, em lotes pequenos.</p><span class="metric">12 min · termina em 205 °C</span></li>
+        <li class="step" data-reveal><span class="eyebrow">Etapa 4</span><h3>Descanso</h3><p>O grão libera gás carbônico antes de ir para o moinho.</p><span class="metric">7 dias</span></li>
+        <li class="step" data-reveal><span class="eyebrow">Etapa 5</span><h3>Moagem na hora</h3><p>Moemos só o que vai para a sua xícara.</p><span class="metric">ajuste por método</span></li>
+        <li class="step" data-reveal><span class="eyebrow">Etapa 6</span><h3>Extração</h3><p>Receita pesada na balança, sempre igual.</p><span class="metric">18 g → 36 g · 28 s · 93 °C</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="espaco" aria-labelledby="espaco-t">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="eyebrow" data-reveal>O espaço</span>
+        <h2 id="espaco-t" data-reveal style="--i:1">Fique o tempo que quiser.</h2>
+      </div>
+      <div class="perks">
+        <div class="perk" data-reveal style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg><h3>Wi-Fi rápido</h3><p>Senha no cardápio do balcão.</p></div>
+        <div class="perk" data-reveal style="--i:1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"/></svg><h3>Tomadas</h3><p>Em todas as mesas.</p></div>
+        <div class="perk" data-reveal style="--i:2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="10" r="2"/><circle cx="9" cy="5" r="2"/><circle cx="15" cy="5" r="2"/><circle cx="19" cy="10" r="2"/><path d="M12 12c-3 0-6 3.5-6 6.5 0 2 2 2.5 3 2l3-1 3 1c1 .5 3 0 3-2 0-3-3-6.5-6-6.5z"/></svg><h3>Pet friendly</h3><p>Água fresca para o seu cão.</p></div>
+        <div class="perk" data-reveal style="--i:3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 7h13l-1.5 9a3 3 0 0 1-3 2.5h-4a3 3 0 0 1-3-2.5zM16 9h2a2.5 2.5 0 0 1 0 5h-2.6"/><path d="M8 3v2M11 3v2"/></svg><h3>Café em grão</h3><p>Pacote de 250 g por R$ 52.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="visite" aria-labelledby="visite-t">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="eyebrow" data-reveal>Visite</span>
+        <h2 id="visite-t" data-reveal style="--i:1">A xícara está esperando.</h2>
+      </div>
+      <div class="visit">
+        <div data-reveal style="display:grid;gap:12px">
+          <p class="address">Rua das Acácias, 214<br>Vila Mariana, São Paulo</p>
+          <p style="color:var(--muted)">A duas quadras do metrô Ana Rosa. Bicicletário na calçada.</p>
+        </div>
+        <table class="hours" data-reveal style="--i:1" aria-label="Horário de funcionamento">
+          <tbody>
+            <tr data-days="1,2,3,4,5"><td>Segunda a sexta</td><td>7h – 20h</td></tr>
+            <tr data-days="6"><td>Sábado</td><td>8h – 20h</td></tr>
+            <tr data-days="0"><td>Domingo</td><td>8h – 14h</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <strong>Torra Lenta</strong>
+    <span>Cafeteria fictícia criada como demonstração de site para celular.</span>
+  </div>
+</footer>
+
+<nav class="bottom-nav" aria-label="Navegação rápida">
+  <a href="#inicio" data-nav="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</a>
+  <a href="#cardapio" data-nav="cardapio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6zM17 11h1.5a2.5 2.5 0 0 1 0 5H16.5M8 3v3M12 3v3"/></svg>Cardápio</a>
+  <a href="#processo" data-nav="processo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="6" ry="9" transform="rotate(30 12 12)"/><path d="M9 5c4 4 2 10 6 14"/></svg>Processo</a>
+  <a href="#visite" data-nav="visite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Visite</a>
+</nav>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Aparece e some ao rolar ---------- */
+  var items = Array.prototype.slice.call(document.querySelectorAll("[data-reveal]"));
+  var vh = window.innerHeight;
+  // Marca quem já está na tela antes de ativar o estilo, para nada piscar ao carregar.
+  items.forEach(function (el) {
+    var r = el.getBoundingClientRect();
+    if (r.top < vh && r.bottom > 0) el.setAttribute("data-visible", "");
+    else el.setAttribute("data-side", r.top >= vh ? "below" : "above");
+  });
+
+  if ("IntersectionObserver" in window) {
+    root.classList.add("reveal-ready");
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var el = e.target;
+        if (e.isIntersecting) {
+          el.removeAttribute("data-side");
+          el.setAttribute("data-visible", "");
+        } else {
+          // Sai pelo lado por onde passou: some para cima ao descer, para baixo ao subir.
+          el.setAttribute("data-side", e.boundingClientRect.top < 0 ? "above" : "below");
+          el.removeAttribute("data-visible");
+        }
+      });
+    }, { rootMargin: "-6% 0px -6% 0px", threshold: 0 });
+    items.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Efeitos ligados à rolagem (um único quadro por vez) ---------- */
+  var progress = document.getElementById("progress");
+  var header = document.getElementById("header");
+  var heroCopy = document.getElementById("heroCopy");
+  var cup = document.getElementById("cup");
+  var hero = document.getElementById("inicio");
+  var steps = document.getElementById("steps");
+  var stepsFill = document.getElementById("stepsFill");
+  var lastY = window.scrollY;
+  var ticking = false;
+
+  function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+
+  function update() {
+    ticking = false;
+    var y = window.scrollY;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+
+    header.classList.toggle("is-scrolled", y > 8);
+    if (Math.abs(y - lastY) > 6) {
+      header.classList.toggle("is-hidden", y > lastY && y > 120);
+      lastY = y;
+    }
+
+    var stepsRect = steps.getBoundingClientRect();
+    var p = clamp((window.innerHeight * 0.6 - stepsRect.top) / stepsRect.height);
+    stepsFill.style.transform = "scaleY(" + p + ")";
+
+    if (!reduce) {
+      var h = hero.offsetHeight;
+      if (y < h) {
+        var t = y / h;
+        heroCopy.style.transform = "translateY(" + (-t * 48) + "px)";
+        heroCopy.style.opacity = String(1 - t * 0.9);
+        cup.style.transform = "translateY(" + (t * 40) + "px) rotate(" + (-t * 6) + "deg)";
+      }
+    }
+  }
+  window.addEventListener("scroll", function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
+  update();
+
+  /* ---------- Item ativo da navegação ---------- */
+  var navLinks = document.querySelectorAll("[data-nav]");
+  if ("IntersectionObserver" in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var id = e.target.id === "espaco" ? "processo" : e.target.id === "grao" ? "inicio" : e.target.id;
+        navLinks.forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("data-nav") === id ? "true" : "false"); });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    document.querySelectorAll("main section").forEach(function (s) { spy.observe(s); });
+  }
+
+  /* ---------- Abas do cardápio ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+  var pill = document.getElementById("tabPill");
+  function movePill(tab) {
+    pill.style.width = tab.offsetWidth + "px";
+    pill.style.transform = "translateX(" + tab.offsetLeft + "px)";
+  }
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    movePill(tab);
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener("click", function () { select(t); });
+    t.addEventListener("keydown", function (e) {
+      var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (!d) return;
+      var next = tabs[(i + d + tabs.length) % tabs.length];
+      next.focus(); select(next);
+    });
+  });
+  movePill(tabs[0]);
+  window.addEventListener("resize", function () {
+    movePill(document.querySelector('.tab[aria-selected="true"]'));
+  });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { movePill(document.querySelector('.tab[aria-selected="true"]')); });
+  }
+
+  /* ---------- Aberto agora? ---------- */
+  var hours = { 0: [8, 14], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [8, 20] };
+  var now = new Date();
+  var day = now.getDay();
+  var today = hours[day];
+  var hour = now.getHours() + now.getMinutes() / 60;
+  var status = document.getElementById("status");
+  var open = hour >= today[0] && hour < today[1];
+  status.querySelector("span").textContent = open
+    ? "Aberto agora · fecha às " + today[1] + "h"
+    : (hour < today[0] ? "Abre hoje às " + today[0] + "h" : "Fechado agora · abre amanhã às " + hours[(day + 1) % 7][0] + "h");
+  status.classList.toggle("is-closed", !open);
+  document.querySelectorAll(".hours tr").forEach(function (tr) {
+    if (tr.getAttribute("data-days").split(",").indexOf(String(day)) > -1) tr.classList.add("is-today");
+  });
+})();
+</script>
+</body>
+</html>
