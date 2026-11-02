@@ -29,11 +29,12 @@ Para ver: abra `hamburgueria/index.html` no navegador, ou acesse `/hamburgueria/
 
 ## Brasa 41 por dentro (`hamburgueria/imersivo/`)
 
-Experiência 3D (Three.js) da mesma hamburgueria: você entra no salão e a rolagem monta o Brasa Duplo camada por camada.
+Experiência 3D (Three.js) da mesma hamburgueria: começa do outro lado da rua, à noite, atravessa a faixa, as portas se abrem e a câmera entra no salão; lá dentro o Brasa Duplo brota da tábua, desmontado, e a rolagem monta camada por camada.
 
-- A rolagem é a do próprio navegador; a cena segue com inércia. Cada camada voa em arco, inclina no sentido do movimento, assenta e o queijo derrete ao cair na carne. Rolar para cima desmonta.
+- A rolagem é a do próprio navegador; a cena segue com inércia. Lá fora: fachada com letreiro aceso, toldos, janelas mostrando o salão, poste, moto de entrega e cavalete. O lanche só aparece quando a câmera cruza a porta.
+- Cada camada voa em arco, inclina no sentido do movimento, assenta e o queijo derrete ao cair na carne. Rolar para cima desmonta e volta para a rua.
 - Arrastar para os lados gira o lanche. No computador o mouse move a câmera de leve; em celulares Android, inclinar o aparelho também.
-- Desempenho: a resolução baixa sozinha se o FPS cair (abaixo de ~47) e volta a subir quando sobra folga; a cena para de desenhar quando nada se mexe. Para ver o FPS no aparelho, abra o endereço com `?fps` no fim.
+- Desempenho: as peças paradas são juntadas (menos de 80 chamadas de desenho por quadro); a resolução baixa sozinha se o FPS cair (abaixo de ~47) e volta a subir quando sobra folga; a cena para de desenhar quando nada se mexe. Para ver o FPS no aparelho, abra o endereço com `?fps` no fim.
 - Botão "Pausar" para a animação contínua; com "reduzir movimento" no sistema, a câmera fica parada; sem WebGL, aparece uma versão estática com o mesmo texto.
 - "Pôr na comanda" adiciona o Brasa Duplo à comanda do site principal.
 
