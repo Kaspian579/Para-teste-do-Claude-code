@@ -13,3 +13,16 @@ Site de uma cafeteria fictícia, feito primeiro para celular, em um único arqui
 Para ver: abra `cafeteria/index.html` no navegador.
 
 O padrão de animação está documentado na skill `.claude/skills/scroll-reveal-mobile/`.
+
+## Hamburgueria Brasa 41 (`hamburgueria/`)
+
+Site de uma hamburgueria fictícia, feito primeiro para celular, em um único arquivo (`hamburgueria/index.html`, sem instalar nada). Projeto novo, construído só com as regras destes repositórios: taste-skill (direção visual), ui-ux-pro-max-skill (acessibilidade e toque), design-motion-principles (movimento) e awesome-claude-design (referência).
+
+- A página é a comanda de papel: picote no topo, tinta vermelha, papel e mostarda.
+- Cardápio completo com preços; cada item vai para a comanda, que soma, salva no aparelho e envia o pedido pelo WhatsApp (retirada ou entrega).
+- Mostra se está aberto agora e destaca o dia de hoje no horário.
+- Lanches desenhados em código; respeita "reduzir movimento"; conteúdo aparece mesmo sem JavaScript.
+
+Antes de usar de verdade: trocar telefone (`PHONE` no script), endereço, cardápio, preços e as duas fotos de exemplo pelas reais.
+
+Para ver: abra `hamburgueria/index.html` no navegador, ou acesse `/hamburgueria/` no GitHub Pages do repositório.
