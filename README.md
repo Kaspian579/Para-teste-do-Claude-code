@@ -25,4 +25,4 @@ Site de uma hamburgueria fictícia, feito primeiro para celular, em um único ar
 
 Antes de usar de verdade: trocar telefone (`PHONE` no script), endereço, cardápio, preços e as duas fotos de exemplo pelas reais.
 
-Para ver: abra `hamburgueria/index.html` no navegador.
+Para ver: abra `hamburgueria/index.html` no navegador, ou acesse `/hamburgueria/` no GitHub Pages do repositório.
