@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Brasa 41 por dentro</title>
-<meta name="description" content="Entre na Brasa 41 em 3D e monte o Brasa Duplo camada por camada, no ritmo da sua rolagem.">
+<meta name="description" content="Atravesse a rua, entre na Brasa 41 em 3D e monte o Brasa Duplo camada por camada, no ritmo da sua rolagem.">
 <meta name="theme-color" content="#170506">
 <script>
   // Liga o modo 3D antes da primeira pintura, para não haver troca de layout.
@@ -92,7 +92,7 @@ html.is-live .poster { display: none; }
 
 /* ---------- trilho de rolagem: o comprimento da montagem ---------- */
 .trilho { position: relative; z-index: 1; }
-html.is-live .trilho { height: 700vh; height: 700svh; }
+html.is-live .trilho { height: 900vh; height: 900svh; }
 html.is-live .trilho, html.is-live body { touch-action: pan-y pinch-zoom; }
 
 /* ---------- cartões: comandas que acompanham a montagem ---------- */
@@ -149,30 +149,38 @@ html.sem-3d .dica-rolar, html:not(.is-live) .dica-rolar, html:not(.is-live) .dic
   <section class="cartoes" aria-label="A montagem do Brasa Duplo">
     <article class="cartao on" data-ch="0">
       <h1 class="display">Brasa 41, por dentro</h1>
-      <p>Você acabou de entrar. Role a tela: cada movimento leva uma camada do Brasa Duplo para o lugar.</p>
-      <p class="dica dica-rolar"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2v13M3.5 9.5 9 15l5.5-5.5" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>Role para montar</p>
+      <p>Rua das Brasas, 41. A chapa está acesa: role a tela para atravessar a rua e entrar.</p>
+      <p class="dica dica-rolar"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2v13M3.5 9.5 9 15l5.5-5.5" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>Role para entrar</p>
     </article>
     <article class="cartao" data-ch="1">
+      <h2 class="display">Porta aberta até 23h30</h2>
+      <p>Pela janela já dá para ver o balcão, a chapa e as comandas penduradas.</p>
+    </article>
+    <article class="cartao" data-ch="2">
+      <h2 class="display">Entrou: o lanche apareceu</h2>
+      <p>O Brasa Duplo está desmontado sobre o balcão. Cada movimento seu põe uma camada no lugar.</p>
+    </article>
+    <article class="cartao" data-ch="3">
       <h2 class="display">Pão de batata, selado na chapa</h2>
       <p>A base vai primeiro, com o molho da casa por cima.</p>
       <p class="conta" data-conta></p>
     </article>
-    <article class="cartao" data-ch="2">
+    <article class="cartao" data-ch="4">
       <h2 class="display">Bola de 90 g, prensada a 230 °C</h2>
       <p>A crosta sai em 90 segundos. O queijo prato derrete em cima.</p>
       <p class="conta" data-conta></p>
     </article>
-    <article class="cartao" data-ch="3">
+    <article class="cartao" data-ch="5">
       <h2 class="display">De novo, porque é Duplo</h2>
       <p>Mais uma carne e mais uma fatia de queijo prato.</p>
       <p class="conta" data-conta></p>
     </article>
-    <article class="cartao" data-ch="4">
+    <article class="cartao" data-ch="6">
       <h2 class="display">Picles e a tampa</h2>
       <p>O pão de cima fecha tudo enquanto o queijo ainda está mole.</p>
       <p class="conta" data-conta></p>
     </article>
-    <article class="cartao" data-ch="5">
+    <article class="cartao" data-ch="7">
       <h2 class="display">Pronto: Brasa Duplo</h2>
       <p>Duas carnes de 90 g, queijo prato em dobro, picles e molho da casa. R$ 34.</p>
       <div class="acoes">
