@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brasa 41 por dentro</title>
+<meta name="description" content="Entre na Brasa 41 em 3D e monte o Brasa Duplo camada por camada, no ritmo da sua rolagem.">
+<meta name="theme-color" content="#170506">
+<script>
+  // Liga o modo 3D antes da primeira pintura, para não haver troca de layout.
+  // Se o 3D falhar, cena.min.js (ou o nomodule abaixo) desliga de volta.
+  (function (h) {
+    h.classList.add('js');
+    if ('WebGL2RenderingContext' in window || 'WebGLRenderingContext' in window) h.classList.add('is-live');
+  })(document.documentElement);
+</script>
+<script nomodule>document.documentElement.classList.remove('is-live');</script>
+<link rel="modulepreload" href="./cena.min.js">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --noite: #170506;
+  --vinho: #7d0c14;
+  --vinho-escuro: #5e0910;
+  --papel: #e6e3dd;
+  --papel-2: #d9d5cd;
+  --mostarda: #e0a526;
+  --tinta-suave: #6a3438;
+  /* nomes usados pelo desenho do lanche reaproveitado do site */
+  --ink: var(--vinho);
+  --paper: var(--papel);
+  --font: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --margem: clamp(16px, 4vw, 40px);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--noite); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--noite);
+  color: var(--papel);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, p { margin: 0; }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--mostarda); outline-offset: 3px; }
+.display { font-weight: 800; font-stretch: 62%; text-transform: uppercase; letter-spacing: -0.01em; line-height: 0.9; text-wrap: balance; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- barra do topo ---------- */
+.barra {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+  display: flex; align-items: center; gap: 8px;
+  padding: max(10px, env(safe-area-inset-top)) var(--margem) 10px;
+}
+.marca { font-size: 1.75rem; text-decoration: none; margin-right: auto; min-height: 44px; display: inline-flex; align-items: center; color: var(--papel); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 0 20px; border: 0; border-radius: 0;
+  font-weight: 600; font-size: 1rem; line-height: 1.1; text-decoration: none;
+  transition: transform 140ms var(--ease-out), background-color 180ms ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-mostarda { background: var(--mostarda); color: var(--vinho); }
+.btn-mostarda:hover { background: #ecb53a; }
+.btn-tinta { background: var(--vinho); color: var(--papel); }
+.btn-tinta:hover { background: var(--vinho-escuro); }
+.btn-papel { background: var(--papel-2); color: var(--vinho); }
+.btn-papel:hover { background: #cfcac1; }
+.barra .btn { min-height: 44px; padding: 0 16px; }
+#pausa { display: none; background: rgba(23, 5, 6, 0.72); color: var(--papel); }
+html.is-live #pausa { display: inline-flex; }
+#fps { position: fixed; top: calc(max(10px, env(safe-area-inset-top)) + 56px); right: var(--margem); z-index: 30; background: var(--papel); color: var(--vinho); font-weight: 600; font-size: 0.875rem; padding: 6px 10px; font-variant-numeric: tabular-nums; }
+
+/* ---------- a cena ---------- */
+#cena { display: none; }
+html.is-live #cena {
+  display: block; position: fixed; left: 0; top: 0; width: 100%;
+  height: 100vh; height: 100lvh;
+  touch-action: pan-y pinch-zoom;
+}
+.poster { padding: 96px var(--margem) 0; max-width: 560px; }
+.poster svg { width: min(100%, 360px); height: auto; display: block; background: var(--papel); padding: 28px; }
+html.is-live .poster { display: none; }
+
+/* ---------- trilho de rolagem: o comprimento da montagem ---------- */
+.trilho { position: relative; z-index: 1; }
+html.is-live .trilho { height: 700vh; height: 700svh; }
+html.is-live .trilho, html.is-live body { touch-action: pan-y pinch-zoom; }
+
+/* ---------- cartões: comandas que acompanham a montagem ---------- */
+.cartoes { display: grid; gap: 14px; padding: 24px var(--margem) 48px; max-width: 560px; }
+.cartao { position: relative; background: var(--papel); color: var(--vinho); padding: 32px 22px 22px; }
+.cartao::before { content: ""; position: absolute; left: 0; right: 0; top: 10px; border-top: 6px dotted var(--papel-2); }
+.cartao h1, .cartao h2 { font-size: clamp(2.25rem, 1.5rem + 3.4vw, 3.4rem); }
+.cartao p { margin-top: 12px; }
+.conta { font-weight: 600; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.dica { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9375rem; color: var(--tinta-suave); }
+.dica svg { width: 18px; height: 18px; flex: none; }
+.acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+html.is-live .cartoes { position: fixed; inset: auto 0 0 0; z-index: 20; display: block; max-width: none; padding: 0; pointer-events: none; }
+html.is-live .cartao {
+  position: absolute; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom));
+  opacity: 0; transform: translateY(22px); visibility: hidden; pointer-events: none;
+  transition: opacity 180ms var(--ease-exit), transform 180ms var(--ease-exit), visibility 0s linear 180ms;
+}
+html.is-live .cartao.on {
+  opacity: 1; transform: none; visibility: visible; pointer-events: auto;
+  transition: opacity 360ms var(--ease-out) 60ms, transform 520ms var(--ease-out) 60ms, visibility 0s;
+}
+@media (min-width: 760px) {
+  html.is-live .cartao { left: var(--margem); right: auto; width: 440px; bottom: var(--margem); }
+}
+html.sem-3d .dica-rolar, html:not(.is-live) .dica-rolar, html:not(.is-live) .dica-girar, html:not(.is-live) .conta { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+</style>
+</head>
+<body>
+<header class="barra">
+  <a class="marca display" href="../">Brasa 41</a>
+  <button class="btn" id="pausa" type="button" aria-pressed="false">Pausar</button>
+  <a class="btn btn-mostarda" href="../#cardapio">Pedir</a>
+</header>
+<p id="fps" hidden></p>
+<canvas id="cena" aria-hidden="true"></canvas>
+
+<main class="trilho" id="trilho">
+  <div class="poster" aria-hidden="true"><svg class="burger-desenho" viewBox="0 0 200 198" width="200" height="198" role="img" aria-label="Desenho do Brasa Duplo: pão, queijo, duas carnes prensadas, cebola e molho"><g class="layer" style="--i:0">
+    <path d="M12 155 H188 Q192 155 190 160 L184 174 Q182 179 176 179 H24 Q18 179 16 174 L10 160 Q8 155 12 155 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/></g><g class="layer" style="--i:1">
+    <path d="M18 148 H182 L176 152 L132 152 L126 159 L120 152 L62 152 L57 157 L52 152 L24 152 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/></g><g class="layer" style="--i:2"><ellipse cx="24" cy="138" rx="15" ry="5" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><ellipse cx="54" cy="138" rx="15" ry="5" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><ellipse cx="84" cy="138" rx="15" ry="5" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><ellipse cx="114" cy="138" rx="15" ry="5" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><ellipse cx="144" cy="138" rx="15" ry="5" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/><ellipse cx="174" cy="138" rx="15" ry="5" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/></g><g class="layer" style="--i:3">
+    <path d="M14 109 Q30 105 50 108 Q75 104 100 108 Q128 104 150 108 Q172 105 186 109 Q194 118 186 127 Q160 131 130 128 Q100 132 70 128 Q38 131 14 127 Q6 118 14 109 Z" fill="var(--ink)"/>
+    <circle cx="34" cy="115" r="1.8" fill="var(--paper)"/><circle cx="58" cy="121" r="1.8" fill="var(--paper)"/><circle cx="84" cy="114" r="1.8" fill="var(--paper)"/><circle cx="110" cy="122" r="1.8" fill="var(--paper)"/><circle cx="136" cy="115" r="1.8" fill="var(--paper)"/><circle cx="162" cy="121" r="1.8" fill="var(--paper)"/><circle cx="72" cy="124" r="1.8" fill="var(--paper)"/><circle cx="150" cy="112" r="1.8" fill="var(--paper)"/></g><g class="layer" style="--i:4">
+    <path d="M8 96 H192 L186 104 L170 104 L162 118 L154 104 L104 104 L96 122 L88 104 L40 104 L33 114 L26 104 L14 104 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/></g><g class="layer" style="--i:5">
+    <path d="M14 73 Q30 69 50 72 Q75 68 100 72 Q128 68 150 72 Q172 69 186 73 Q194 82 186 91 Q160 95 130 92 Q100 96 70 92 Q38 95 14 91 Q6 82 14 73 Z" fill="var(--ink)"/>
+    <circle cx="34" cy="79" r="1.8" fill="var(--paper)"/><circle cx="58" cy="85" r="1.8" fill="var(--paper)"/><circle cx="84" cy="78" r="1.8" fill="var(--paper)"/><circle cx="110" cy="86" r="1.8" fill="var(--paper)"/><circle cx="136" cy="79" r="1.8" fill="var(--paper)"/><circle cx="162" cy="85" r="1.8" fill="var(--paper)"/><circle cx="72" cy="88" r="1.8" fill="var(--paper)"/><circle cx="150" cy="76" r="1.8" fill="var(--paper)"/></g><g class="layer" style="--i:6">
+    <path d="M8 60 H192 L186 68 L170 68 L162 82 L154 68 L104 68 L96 86 L88 68 L40 68 L33 78 L26 68 L14 68 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/></g><g class="layer" style="--i:7">
+    <path d="M10 56 C10 16 52 6 100 6 C148 6 190 16 190 56 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+    <ellipse cx="60" cy="24" rx="5" ry="2.6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" transform="rotate(-12 60 24)"/><ellipse cx="92" cy="17" rx="5" ry="2.6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" transform="rotate(12 92 17)"/><ellipse cx="126" cy="22" rx="5" ry="2.6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" transform="rotate(-12 126 22)"/><ellipse cx="76" cy="36" rx="5" ry="2.6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" transform="rotate(0 76 36)"/><ellipse cx="112" cy="34" rx="5" ry="2.6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" transform="rotate(0 112 34)"/><ellipse cx="146" cy="38" rx="5" ry="2.6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" transform="rotate(12 146 38)"/><ellipse cx="48" cy="42" rx="5" ry="2.6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" transform="rotate(-12 48 42)"/></g></svg></div>
+  <section class="cartoes" aria-label="A montagem do Brasa Duplo">
+    <article class="cartao on" data-ch="0">
+      <h1 class="display">Brasa 41, por dentro</h1>
+      <p>Você acabou de entrar. Role a tela: cada movimento leva uma camada do Brasa Duplo para o lugar.</p>
+      <p class="dica dica-rolar"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2v13M3.5 9.5 9 15l5.5-5.5" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>Role para montar</p>
+    </article>
+    <article class="cartao" data-ch="1">
+      <h2 class="display">Pão de batata, selado na chapa</h2>
+      <p>A base vai primeiro, com o molho da casa por cima.</p>
+      <p class="conta" data-conta></p>
+    </article>
+    <article class="cartao" data-ch="2">
+      <h2 class="display">Bola de 90 g, prensada a 230 °C</h2>
+      <p>A crosta sai em 90 segundos. O queijo prato derrete em cima.</p>
+      <p class="conta" data-conta></p>
+    </article>
+    <article class="cartao" data-ch="3">
+      <h2 class="display">De novo, porque é Duplo</h2>
+      <p>Mais uma carne e mais uma fatia de queijo prato.</p>
+      <p class="conta" data-conta></p>
+    </article>
+    <article class="cartao" data-ch="4">
+      <h2 class="display">Picles e a tampa</h2>
+      <p>O pão de cima fecha tudo enquanto o queijo ainda está mole.</p>
+      <p class="conta" data-conta></p>
+    </article>
+    <article class="cartao" data-ch="5">
+      <h2 class="display">Pronto: Brasa Duplo</h2>
+      <p>Duas carnes de 90 g, queijo prato em dobro, picles e molho da casa. R$ 34.</p>
+      <div class="acoes">
+        <a class="btn btn-tinta" href="../#cardapio" data-pedir>Pôr na comanda</a>
+        <button class="btn btn-papel" type="button" data-de-novo>Montar de novo</button>
+      </div>
+      <p class="dica dica-girar" style="margin-top:14px">Arraste para os lados para girar o lanche.</p>
+    </article>
+  </section>
+</main>
+<p class="sr" role="status" aria-live="polite" id="anuncio"></p>
+
+<script>
+  // "Pôr na comanda" usa a mesma comanda do site (fica salva no aparelho).
+  document.querySelectorAll('[data-pedir]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      try {
+        var k = 'brasa41-comanda', c = JSON.parse(localStorage.getItem(k) || '{}') || {};
+        c.duplo = (c.duplo || 0) + 1;
+        localStorage.setItem(k, JSON.stringify(c));
+      } catch (e) {}
+    });
+  });
+  document.querySelectorAll('[data-de-novo]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: parado ? 'auto' : 'smooth' });
+    });
+  });
+</script>
+<script type="module" src="./cena.min.js" onerror="document.documentElement.classList.remove('is-live');document.documentElement.classList.add('sem-3d')"></script>
+</body>
+</html>

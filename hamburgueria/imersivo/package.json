@@ -1,0 +1,13 @@
+{
+  "name": "brasa41-imersivo",
+  "private": true,
+  "type": "module",
+  "description": "Brasa 41 por dentro: cena 3D da hamburgueria. Gera cena.min.js a partir de src/cena.js.",
+  "scripts": {
+    "build": "esbuild src/cena.js --bundle --minify --format=esm --target=es2020 --legal-comments=eof --outfile=cena.min.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "three": "0.186.1"
+  }
+}
