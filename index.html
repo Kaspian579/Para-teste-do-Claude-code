@@ -192,8 +192,24 @@ section { position: relative; min-height: 100vh; height: 100vh; overflow: hidden
   Made by <b>Melli</b>
 </div>
 
-<script>
-(() => {
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const BEE_GLB = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261017_132918_e8364d8f-7df2-4788-a725-dec28ec19af8.glb";
+const WING_TEX = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261017_132814_3a56ac14-47d8-4e49-a163-94234dea5639.png";
+
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const lerpAngle = (a, b, t) => { const d = ((b - a + 540) % 360) - 180; return a + d * t; };
+const D2R = Math.PI / 180;
+
 /* ---------- 5a. DOM scroll effects ---------- */
 const sections = [...document.querySelectorAll("main > section")];
 const io = new IntersectionObserver((entries) => {
@@ -225,31 +241,9 @@ onScroll();
 
 /* ---------- 5b. Loader ---------- */
 const loaderEl = document.getElementById("loader");
-window.melliReveal = function reveal() { loaderEl.classList.add("done"); document.body.classList.add("loaded"); }
-setTimeout(window.melliReveal, 2500);
-
-})();
-</script>
-<script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
-</script>
-<script type="module">
-import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-
-const BEE_GLB = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261017_132918_e8364d8f-7df2-4788-a725-dec28ec19af8.glb";
-const WING_TEX = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261017_132814_3a56ac14-47d8-4e49-a163-94234dea5639.png";
-
-const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-const lerp = (a, b, t) => a + (b - a) * t;
-const ease = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-const lerpAngle = (a, b, t) => { const d = ((b - a + 540) % 360) - 180; return a + d * t; };
-const D2R = Math.PI / 180;
-
 const canvas = document.getElementById("bee");
-const reveal = window.melliReveal;
+function reveal() { loaderEl.classList.add("done"); document.body.classList.add("loaded"); }
+setTimeout(reveal, 2500);
 
 /* ---------- 5c. Scene ---------- */
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });

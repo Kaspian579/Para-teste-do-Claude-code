@@ -7,7 +7,6 @@ on:
       - "code_descompactado.zip"
       - "cafeteria/**"
       - "hamburgueria/**"
-      - "melli/**"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -55,9 +54,6 @@ jobs:
 
       - name: Add hamburgueria site
         run: cp -r hamburgueria site/dist/public/hamburgueria
-
-      - name: Add melli site
-        run: cp -r melli site/dist/public/melli
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

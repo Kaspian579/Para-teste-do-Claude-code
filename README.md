@@ -38,14 +38,3 @@ Experiência 3D (Three.js) da mesma hamburgueria: você entra no salão e a rola
 - "Pôr na comanda" adiciona o Brasa Duplo à comanda do site principal.
 
 Código-fonte em `hamburgueria/imersivo/src/cena.js`; o arquivo publicado `cena.min.js` é gerado com `npm install && npm run build` dentro dessa pasta. Precisa de um servidor (GitHub Pages ou `python3 -m http.server`): aberto direto do disco, o navegador não carrega o módulo.
-
-## Melli — Master 3D Artistry (`melli/`)
-
-Página de apresentação de uma escola fictícia de animação 3D, em um único arquivo (`melli/index.html`, sem instalar nada). Uma abelha em 3D (Three.js 0.160.0) voa pela tela conforme a rolagem: para em cada seção e voa até a próxima, inclinando nas curvas, com asas feitas em código batendo sem parar.
-
-- Título que sobe ao abrir, flores com parallax e giro lento, textos que aparecem ao entrar em cada seção.
-- Menu e selo ficam brancos sobre a seção escura.
-- O mouse puxa a abelha de leve; no celular ela fica menor e em outra rota.
-- Se o modelo 3D (cerca de 19 MB) ou o three.js demorarem ou falharem, a página aparece mesmo assim depois de 2,5 s.
-
-Imagens e modelo vêm de links externos (CloudFront). Para ver: acesse `/melli/` no GitHub Pages do repositório, ou rode `python3 -m http.server` na raiz e abra `/melli/`.
